@@ -8,7 +8,6 @@ import os
 import jinja2
 import sys
 
-from config import UPLOAD_FOLDER
 
 def create_app():
     app = Flask(__name__) # creates the Flask instance, __name__ is the name of the current Python module
@@ -16,8 +15,6 @@ def create_app():
         
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['SESSION_COOKIE_HTTPONLY'] = False
-
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     
     Bootstrap(app)
         
