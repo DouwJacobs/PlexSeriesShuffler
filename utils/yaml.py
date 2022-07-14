@@ -1,6 +1,9 @@
 import yaml
 import os
 
+from utils.plex_tools import PlexTools
+
+
 class YamlTools:
 
     def __init__(self, configPath):
@@ -98,6 +101,10 @@ class YamlTools:
             data[base][name] = value
 
             self.writeConfig(data)
+
+            if base in ['PLEX']:
+                global plex
+                plex = PlexTools(self.baseurl(), self.token())
 
             return True
         else:

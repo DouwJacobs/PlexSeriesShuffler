@@ -20,6 +20,7 @@ from utils.plexLogin import PlexLogin
 plexLogin = PlexLogin()
 
 from utils.plex_tools import PlexTools
+global plex
 plex = PlexTools(yaml.baseurl(), yaml.token())
 
 ########################################################################################

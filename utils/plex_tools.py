@@ -22,14 +22,6 @@ class PlexTools:
             except requests.exceptions.ConnectionError as e:
                 self.server = None
 
-    def checkConnection(self):
-
-        if not self.server:
-            self.server = PlexServer(self.baseurl, self.token)
-        
-        return self.server
-    
-
     def getPlaylists(self):
 
         playlists = {}
