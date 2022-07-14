@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% if title %}
+    <title>Plex Series Shuffler - {{ title }}</title>
+    {% else %}
+    <title>Plex Series Shuffler</title>
+    {% endif %}	
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/uikit.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/spinner.css') }}">
+<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+	<script>socket = io.connect();</script>
+</head>
+
+
+
+<body>
+
+	<div  uk-height-viewport>
+		<div class="uk-background-cover uk-flex uk-flex-center uk-flex-middle" style="background-image: url({{ url_for('static', filename='images/bg-01.jpg') }})" uk-height-viewport>
+			<div class="uk-container uk-width-expand" uk-height-viewport>
+				
+					<nav class="uk-navbar-transparent uk-light uk-flex uk-width-expand" uk-navbar>
+						
+						{% if token %}
+						<div class="uk-navbar-left">
+					
+							<ul class="uk-navbar-nav uk-text-secondary">
+								<li class="uk-text-secondary"><a  class="uk-text-secondary" href="{{ url_for('index') }}">Home</a></li>
+							</ul>
+					
+						</div>
+						
+						
+						<div class="uk-navbar-right">
+							<ul class="uk-navbar-nav">
+								<li class="uk-text-secondary"><a class="uk-text-secondary" href="{{ url_for('settings') }}">Settings</a></li>
+								<li class="uk-text-secondary"><a class="uk-text-secondary" href="{{ url_for('logout') }}">Logout</a></li>
+							</ul>
+						</div>
+						{% endif %}
+					</nav>
+				
+					<h3></h3>
+					{% block content %}
+					{% endblock %}
+		
+			</div>
+		</div>
+	</div>
+
+		
+	
+</body>
+
+<div id="loading">
+	<div uk-spinner="ratio: 3" class="uk-position-center"></div>
+</div>
+
+<!--===============================================================================================-->
+<script src="{{ url_for('static', filename='js/uikit.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/uikit-icons.min.js') }}"></script>
+<script>
+	$(window).on('load',function(){
+        document.getElementById('loading').style.display = 'none';
+    });
+
+</script>
+
+
+
+</html>

@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% block index_content %}
+
+<div class="uk-child-width-1-6@s uk-child-width-1-6@m uk-text-center uk-grid-small uk-grid-match" uk-grid>
+{% if shows != 'ConnectionError' %}
+    {% for key, value in shows.items() %}
+        <div>
+            <div class="uk-card" id="{{ value['guid'] }}" onclick="getShowData(this)">
+                <div class="uk-card-media-top">
+                    <img src="{{ value['thumb'] }}" alt=""  >
+                </div>
+                <div class="uk-card-body pointer">
+                    <div class=" uk-text-small">{{ value['title'] }}</div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+</div>
+
+{% endblock index_content %}

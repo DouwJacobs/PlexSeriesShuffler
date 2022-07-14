@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+{% block index_content %}
+<div class="uk-child-width-1-1@s uk-child-width-1-1@m uk-width-expand" uk-grid>
+
+    <h3>Playlist: {{ playlistName }}</h3>
+    <div class="uk-overflow-auto">
+        <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink"></th>
+                    <th class="uk-table-shrink uk-text-nowrap">TV Show</th>
+                    <th class="uk-width-small">Title</th>
+                    <th class="uk-width-small">Episode</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key,value in episodes.items() %}
+                    <tr>
+                        <td><img class="uk-preserve-width uk-border-circle" src="{{ value['thumb'] }}" width="120" height="120" alt=""></td>
+                        <td>{{ value['tv_show'] }}</td>
+                        <td>{{ value['title'] }}</td>
+                        <td>{{ value['episode'] }}</td>
+                        <td>{{ value['summary'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock index_content %}

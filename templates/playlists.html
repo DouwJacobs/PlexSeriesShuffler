@@ -1,0 +1,31 @@
+{% extends "index.html" %}
+{% block index_content %}
+<div class="uk-child-width-1-1@s uk-child-width-1-1@m uk-width-expand" uk-grid>
+
+    <h3>Playlists</h3>
+    <div class="uk-overflow-auto">
+        <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink"></th>
+                    <th class="uk-table-shrink uk-text-nowrap">Playlist Name</th>
+                    <th class="uk-width-small">Episodes</th>
+                    <th class="uk-width-small">Runtime</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key,value in playlists.items() %}
+                    <tr>
+                        <td><a href="{{ url_for('delete_playlist', playlistID = key) }}" class="uk-icon-link" uk-icon="trash"></a></td>
+                        <td>{{ value['title'] }}</td>
+                        <td>{{ value['episodes'] }}</td>
+                        <td>{{ value['time'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock index_content %}

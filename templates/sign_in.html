@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="uk-width-1-1">
+		<div class="uk-container uk-position-center">
+			<div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
+				
+				<div class="uk-width-1-1@m">
+					<div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
+						<img class="uk-align-center" src="{{ url_for('static', filename='images/logo.png') }}">
+						<h3 class="uk-card-title uk-text-center">Login with Plex!</h3>
+							<div class="uk-margin">
+								<button class="uk-button uk-button-primary uk-button-large uk-width-1-1" onclick="startPlexLogin()">Sign In</button>
+							</div>
+							<div class="uk-text-small uk-text-center">
+								Not registered? <a href="https://www.plex.tv/sign-up/"  target="_blank">Create an account</a>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>
+
+	let plexLoginWindow;
+
+	function startPlexLogin() {
+		document.getElementById("loading").style.display = "block";
+		socket.emit('startPlexLogin');
+	}
+
+	socket.on('plexLoadingRedirect', function(url) {
+		var strWindowFeatures = "location=yes,height=570,width=520,scrollbars=yes,status=yes";
+		plexLoginWindow = window.open(url, '_blank', strWindowFeatures);
+		socket.emit('plexLoginPoll');
+        });
+
+	socket.on('userLoggedIn', function(){
+		plexLoginWindow.close()
+		window.open('{{ url_for("index") }}','_self')
+	});
+
+	socket.on('loginTimedOut', function(){
+		plexLoginWindow.close()
+		document.getElementById("loading").style.display = "none";
+		const modalTitle = '<h3 class="uk-text-center">Sign In Timed Out</h3>';
+        const modalDescription = '<p class="uk-text-center">Please sign in via Plex using the pop up window</p>';
+		const timeOutModal = UIkit.modal.alert(modalTitle + modalDescription);
+	});
+
+</script>
+	
+{% endblock content %}

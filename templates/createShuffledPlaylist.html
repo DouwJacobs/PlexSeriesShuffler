@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+{% block index_content %}
+
+<form method="POST" action="{{ url_for('createShuffledPlaylist') }}">
+    <div class="uk-margin uk-flex-inline uk-align-center" uk-margin>
+        <div class="uk-flex-center uk-align-center">
+            <input class="uk-input uk-form-width-medium" name="playlistName" type="text" placeholder="Playlist Name">
+            <button class="uk-button uk-button-primary">Create</button>
+        </div>
+        
+    </div>
+    <div class="uk-child-width-1-6@s uk-child-width-1-6@m uk-text-center uk-grid-small uk-grid-match" uk-grid>
+
+
+        {% for key, value in shows.items() %}
+            <div>
+                <div class="uk-card" id="{{ key }}">
+                    
+                    <div class="uk-card-media-top">
+                        <input type="checkbox" id="{{ value['guid'] }}" name="{{ value['guid'] }}" class='uk-position-top-left'/>
+                        <label for="{{ value['guid'] }}"><img src="{{ value['thumb'] }}" alt=""/></label>
+                    </div>
+                    <div class="uk-card-body pointer">
+                        <div class=" uk-text-small">{{ value['title'] }}</div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</form>
+
+{% endblock index_content %}

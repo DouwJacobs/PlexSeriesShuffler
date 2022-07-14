@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="uk-container-expand">
+    <div class="uk-grid-small uk-grid-collapse uk-grid uk-light" uk-grid >
+        <div class="uk-width-1-4@s uk-padding">
+            {% if token %}
+            <div uk-sticky="end: #transparent-sticky-navbar; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
+                <nav role="main-navigation uk-light uk-nav-center" >
+                    <ul id='showsPlaylistMenu' class="uk-nav-default uk-nav-parent-icon" uk-nav>
+                    <li><a href="{{ url_for('index') }}">My Shows</a></li>
+                    <li class="uk-parent">
+                        <a href="#">Playlists</a>
+                        <ul class="uk-nav-sub">
+                            {% if title != 'Connection Error' %}
+                                {% for key, value in playlists.items() %}
+                                <li><a href="{{ url_for('playlist', playlistID = key ) }}">{{ value['title'] }}</a></li>
+                                {% endfor %}
+                            {% else %}
+                                <li><span uk-icon="icon: warning"></span> Error!</li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li><a href="{{ url_for('playlists') }}">Manage Playlists</a></li>
+                    <li><a href="{{ url_for('createShuffledPlaylist') }}">Create Shuffled Playlist</a></li>
+                </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+        <div class="uk-width-expand@s uk-padding">
+
+
+                {% block index_content %}
+				{% endblock index_content%}
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+	function getShowData(e) {
+        socket.emit('getShowData',e.id)
+	};
+
+    socket.on('showMetadata', function(metadata) {
+		console.log(metadata)
+        generateInfoModal(metadata)
+        });
+
+    function generateInfoModal(metadata) {
+        const modalTitle = '<h3 class="uk-text-center">' + metadata['title'] + '</h3>';
+        const modalDescription = '<p>' + metadata['summary'] + '</p>';
+        const modalYear = '<p class="uk-padding-remove">Year: ' + metadata['year'] + '</p>';
+        const modalSeasons = '<p class="uk-padding-remove">Seasons Available: ' + metadata['seasons'] + '</p>';
+        const modal = UIkit.modal.alert(modalTitle + modalDescription + modalYear + modalSeasons);
+    };
+
+    showsPlaylistMenu.onclick = e => {
+    var el = e.target;
+    if (el.tagName != "LI") return;
+    showsPlaylistMenu.querySelector(".uk-active").removeAttribute("class");
+    el.setAttribute("class", "uk-active");
+    }
+
+</script>
+
+<!-- MODAL -->
+
+
+<!--       -->
+
+
+{% endblock content %}

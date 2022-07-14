@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="uk-container-expand">
+    <div class="uk-grid-small uk-grid-collapse uk-grid uk-light" uk-grid >
+        <div class="uk-width-1-4@s uk-padding">
+            <div uk-sticky="end: #transparent-sticky-navbar; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
+                <nav role="main-navigation uk-light" >
+                    <ul id='showsPlaylistMenu' class="uk-nav-default uk-nav-parent-icon" uk-switcher="connect: #settings-nav; animation: uk-animation-fade" uk-nav>
+
+                    {% for setting in settings %}
+                        <li><a href="#">{{ setting | replace("_"," ")}}</a></li>
+                    {% endfor %}
+                </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="uk-width-expand@s uk-padding">
+
+            <div class="uk-child-width-1-1@s uk-child-width-1-1@m uk-width-expand uk-light" uk-grid>
+
+                <h3 class="uk-light">Settings</h3>
+                <div class="uk-overflow-auto">
+                    
+                    <ul id="settings-nav" class="uk-switcher">
+                    {% for setting, dict in settings.items() %}
+                    <table class="uk-table uk-table-hover uk-table-middle uk-table-divider" id="settingsTable">
+                        <thead>
+                            <tr>
+                                <th class="uk-table-shrink uk-text-nowrap">Name</th>
+                                <th class="uk-width-small">Value</th>
+                                <th class="uk-table-shrink"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key,value in dict.items() %}
+                                <tr>
+                                    <td>{{ key }}</td>
+                                    <td>{{ value }}</td>
+                                    <td><a value="{{ setting }}" onclick="updateSetting(this)" class="uk-icon-link"  uk-icon="pencil"></a></td>
+                                </tr>
+                            {% endfor %}                     
+                        </tbody>
+                    </table>
+                    
+                    {% endfor %}
+                </ul> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateSetting(element) {
+        var baseValue = element.getAttribute('value')
+        var table = document.getElementById("settingsTable");
+        var row = element.parentNode.parentNode.rowIndex;
+        var setting = table.rows[row].childNodes[1].innerHTML;
+        var value = table.rows[row].childNodes[3].innerHTML;
+        const updateForm = '<div class="uk-flex-center uk-align-center"> <input class="uk-input uk-form-width-medium" name="playlistName" type="text" placeholder="Playlist Name"></div>'
+        UIkit.modal.prompt(setting, value).then(function(input){
+            socket.emit('updateSettingValue', setting, input, baseValue)
+        });
+	}
+
+    socket.on('settingValueInvalid',function(){
+        UIkit.modal.alert('Cannot update setting value. Value is invalid.')
+    });
+
+    socket.on('settingValueValid',function(){
+        location.reload()
+    });
+</script>
+
+
+{% endblock content %}
