@@ -5,7 +5,7 @@
     <div class="uk-margin uk-flex-inline uk-align-center" uk-margin>
         <div class="uk-flex-center uk-align-center">
             <input class="uk-input uk-form-width-medium" name="playlistName" type="text" placeholder="Playlist Name">
-            <button class="uk-button uk-button-primary">Create</button>
+            <button class="uk-button uk-button-primary" onclick="createShuffledPlaylist()">Create</button>
         </div>
         
     </div>
@@ -28,5 +28,12 @@
         {% endfor %}
     </div>
 </form>
+
+<script>
+    function createShuffledPlaylist(){
+        document.getElementById("loading").style.display = "block";
+    };
+
+</script>
 
 {% endblock index_content %}

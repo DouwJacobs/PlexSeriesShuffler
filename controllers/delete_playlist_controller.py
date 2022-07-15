@@ -1,19 +1,21 @@
 from flask import render_template, redirect, url_for, session
 from flask.views import MethodView
 
-from controllers.decorators import login_required
+from controllers.decorators import login_required, checkFirstTime, checkPlexConnection
 
-from main import plex, yaml
+from sockets import APP
 
 class DeletePlaylist(MethodView):
 
     @login_required
+    @checkFirstTime
+    @checkPlexConnection
     def get(self, playlistID):
 
-        plex.deletePlaylist(playlistID)
+        APP.plex.deletePlaylist(playlistID)
 
-        playlists = plex.getPlaylists()
+        playlists = APP.plex.getPlaylists()
 
         return render_template('playlists.html', 
-                                    title="Playlists", playlists=playlists, token=yaml.token())
+                                    title="Playlists", playlists=playlists, token=APP.yaml.token())
 

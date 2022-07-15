@@ -1,0 +1,13 @@
+
+*.pyc
+*.pyc
+flask_session/
+utils/__pycache__/*
+controllers/__pycache__/*
+sockets/__pycache__/*
+venv/
+config.yml
+do_not_touch.yml
+runtime.txt
+*.yml
+*.pyc

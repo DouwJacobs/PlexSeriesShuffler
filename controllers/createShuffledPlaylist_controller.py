@@ -2,19 +2,22 @@ from flask import render_template, request, redirect, url_for
 from flask.views import MethodView
 
 
-from controllers.decorators import login_required
+from controllers.decorators import login_required, checkFirstTime, checkPlexConnection
 
-from main import plex, yaml
+from sockets import APP
 
 class createShuffledPlaylist(MethodView):
 
     @login_required
+    @checkFirstTime
+    @checkPlexConnection
     def get(self):
 
         return render_template('createShuffledPlaylist.html', 
-                                    title="Create Shuffled Playlist", shows=plex.getAllShows(), playlists=plex.getPlaylists(), token=yaml.token())
+                                    title="Create Shuffled Playlist", shows=APP.plex.getAllShows(), playlists=APP.plex.getPlaylists(), token=APP.yaml.token())
 
     @login_required
+    @checkFirstTime
     def post(self):
 
         data = request.form
@@ -25,9 +28,9 @@ class createShuffledPlaylist(MethodView):
 
         for i in data.keys():
             if i != 'playlistName':
-                showsList.append(plex.getShowEpisodes(i))
+                showsList.append(APP.plex.getShowEpisodes(i))
 
-        playlist = plex.createShuffledPlaylist(playlistName, showsList)
+        playlist = APP.plex.createShuffledPlaylist(playlistName, showsList)
 
         return redirect(url_for('playlist', playlistID = playlist.ratingKey))
 

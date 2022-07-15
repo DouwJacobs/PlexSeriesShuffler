@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="uk-width-1-1">
+		<div class="uk-container uk-position-center">
+			<div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
+				
+				<div class="uk-width-1-1@m">
+					<div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
+						<img class="uk-align-center" src="{{ url_for('static', filename='images/logo.png') }}">
+						<h3 class="uk-card-title uk-text-center">Welcome to Series Shuffler</h3>
+						<p class="uk-text-center">Enter Plex Media Server host and port</p>
+						<h3></h3>
+						<input class="uk-input uk-width-large" placeholder="{{ url }}" id="plexURLInput"></input>
+							<div class="uk-margin">
+								<button class="uk-button uk-button-primary uk-button-large uk-width-1-1" onclick="getPlexUrl()">Connect</button>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script>
+
+		function getPlexUrl() {
+			document.getElementById("loading").style.display = "block";
+			socket.emit('checkPlexUrl', document.getElementById('plexURLInput').value)
+		};
+
+		socket.on('plexURLMissing', function(){
+			document.getElementById("loading").style.display = "none";
+			UIkit.modal.alert('Plex Media Server host and port is missing. Please enter host and port to complete setup.');
+		});
+
+		socket.on('plexInvalidURL', function(){
+			document.getElementById("loading").style.display = "none";
+			UIkit.modal.alert('Plex Media Server host and port is malformed. Please enter valid host and port to complete setup.');
+		});
+
+		socket.on('plexValidURL', function(url){
+			socket.emit('checkPlexConnection', url);
+		});
+
+		socket.on('plexConnectionSuccesful', function(){
+			window.open('{{ url_for("index") }}', "_self")
+		});
+
+		socket.on('plexConnectionUnsuccesful', function(){
+			document.getElementById("loading").style.display = "none";
+			UIkit.modal.alert('Cannot connect to Plex Media Server. Please check Plex Media Server host and port details.');
+		});
+
+		
+
+		
+
+		
+
+
+</script>
+	
+{% endblock content %}

@@ -8,7 +8,6 @@ import os
 import jinja2
 import sys
 
-
 def create_app():
     app = Flask(__name__) # creates the Flask instance, __name__ is the name of the current Python module
     app.config['SECRET_KEY'] = 'secret-key-goes-here' # it is used by Flask and extensions to keep data safe
@@ -25,3 +24,8 @@ def create_app():
     app.register_blueprint(main_blueprint)
     
     return app
+
+
+
+
+    

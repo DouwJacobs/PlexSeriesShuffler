@@ -1,20 +1,22 @@
 from flask import render_template, redirect, url_for, session
 from flask.views import MethodView
 
-from controllers.decorators import login_required, checkPlexConnection
+from controllers.decorators import login_required, checkFirstTime, checkPlexConnection
 
-from main import plex, yaml
+from sockets import APP
 
 class Index(MethodView):
 
     @login_required
+    @checkFirstTime
+    @checkPlexConnection
     def get(self):
 
-        plex.checkConnection()
+        print(f"INDEX PLEX: {APP.plex.baseurl}")
 
-        playlists = plex.getPlaylists()
-        shows = plex.getAllShows()
+        playlists = APP.plex.getPlaylists()
+        shows = APP.plex.getAllShows()
 
         return render_template('shows.html', 
-                                    title="Home", shows=shows, playlists=playlists, token=yaml.token())
+                                    title="Home", shows=shows, playlists=playlists, token=APP.yaml.token())
 

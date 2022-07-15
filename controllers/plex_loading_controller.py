@@ -1,8 +1,7 @@
 from flask import render_template, session, request, redirect
 from flask.views import MethodView
 
-from main import plexLogin
-
+from sockets import APP
 
 class PlexLoading(MethodView):
 
@@ -13,9 +12,9 @@ class PlexLoading(MethodView):
 
         executor = Executor(app)
 
-        r = plexLogin.generatePin()
-        authUrl = plexLogin.generateAuthUrl()
+        r = APP.plexLogin.generatePin()
+        authUrl = APP.plexLogin.generateAuthUrl()
 
-        executor.submit(plexLogin.waitPinResponse)
+        executor.submit(APP.plexLogin.waitPinResponse)
 
         return redirect(authUrl)

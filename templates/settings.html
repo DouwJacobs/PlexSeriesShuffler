@@ -37,7 +37,11 @@
                                 <tr>
                                     <td>{{ key }}</td>
                                     <td>{{ value }}</td>
-                                    <td><a value="{{ setting }}" onclick="updateSetting(this)" class="uk-icon-link"  uk-icon="pencil"></a></td>
+                                    <td>
+                                        {% if setting != 'PLEX' %}
+                                            <a value='{{ setting }}' onclick='updateSetting(this)' class='uk-icon-link'  uk-icon='pencil'></a>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}                     
                         </tbody>
@@ -55,16 +59,24 @@
     function updateSetting(element) {
         var baseValue = element.getAttribute('value')
         var table = document.getElementById("settingsTable");
-        var row = element.parentNode.parentNode.rowIndex;
-        var setting = table.rows[row].childNodes[1].innerHTML;
-        var value = table.rows[row].childNodes[3].innerHTML;
+        var row = element.parentNode.parentNode;
+        console.log(element.parentNode.parentNode)
+        var setting = row.childNodes[1].innerHTML;
+        var value = row.childNodes[3].innerHTML;
         const updateForm = '<div class="uk-flex-center uk-align-center"> <input class="uk-input uk-form-width-medium" name="playlistName" type="text" placeholder="Playlist Name"></div>'
         UIkit.modal.prompt(setting, value).then(function(input){
-            socket.emit('updateSettingValue', setting, input, baseValue)
+            if (input == null){
+                // your code here.
+            } else{
+                socket.emit('updateSettingValue', setting, input, baseValue)
+                document.getElementById("loading").style.display = "block";
+            }
+            
         });
 	}
 
     socket.on('settingValueInvalid',function(){
+        document.getElementById("loading").style.display = "none";
         UIkit.modal.alert('Cannot update setting value. Value is invalid.')
     });
 
